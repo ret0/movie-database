@@ -12,3 +12,6 @@ src/main/webapp/META-INF/MANIFEST.MF
 /.settings
 /.externalToolBuilders
 .DS_Store
+
+#intelliJ
+.idea

@@ -8,71 +8,71 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriTemplate;
 
 public class ControllerLinkBuilder extends UriComponentsLinkBuilder<ControllerLinkBuilder> {
-	
-	/**
-	 * Creates a new {@link ControllerLinkBuilder} using the given {@link UriComponentsBuilder}.
-	 * 
-	 * @param builder must not be {@literal null}.
-	 */
-	private ControllerLinkBuilder(UriComponentsBuilder builder) {
-		super(builder);
-	}
 
-	/**
-	 * Creates a new {@link ControllerLinkBuilder} with a base of the mapping annotated to the given controller class.
-	 * 
-	 * @param controller the class to discover the annotation on, must not be {@literal null}.
-	 * @return the created link builder
-	 */
-	public static ControllerLinkBuilder linkTo(Class<?> controller) {
-		return linkTo(controller, new Object[0]);
-	}
+    /**
+     * Creates a new {@link ControllerLinkBuilder} using the given {@link UriComponentsBuilder}.
+     *
+     * @param builder must not be {@literal null}.
+     */
+    private ControllerLinkBuilder(UriComponentsBuilder builder) {
+        super(builder);
+    }
 
-	/**
-	 * Creates a new {@link ControllerLinkBuilder} with a base of the mapping annotated to the given controller class. The
-	 * additional parameters are used to fill up potentially available path variables in the class scop request mapping.
-	 * 
-	 * @param controller the class to discover the annotation on, must not be {@literal null}.
-	 * @param parameters additional parameters to bind to the URI template declared in the annotation, must not be
-	 *          {@literal null}.
-	 * @return the created link builder
-	 */
-	public static ControllerLinkBuilder linkTo(Class<?> controller, Object... parameters) {
+    /**
+     * Creates a new {@link ControllerLinkBuilder} with a base of the mapping annotated to the given controller class.
+     *
+     * @param controller the class to discover the annotation on, must not be {@literal null}.
+     * @return the created link builder
+     */
+    public static ControllerLinkBuilder linkTo(Class<?> controller) {
+        return linkTo(controller, new Object[0]);
+    }
 
-		Assert.notNull(controller);
+    /**
+     * Creates a new {@link ControllerLinkBuilder} with a base of the mapping annotated to the given controller class. The
+     * additional parameters are used to fill up potentially available path variables in the class scop request mapping.
+     *
+     * @param controller the class to discover the annotation on, must not be {@literal null}.
+     * @param parameters additional parameters to bind to the URI template declared in the annotation, must not be
+     *                   {@literal null}.
+     * @return the created link builder
+     */
+    public static ControllerLinkBuilder linkTo(Class<?> controller, Object... parameters) {
 
-		RequestMapping annotation = AnnotationUtils.findAnnotation(controller, RequestMapping.class);
-		String[] mapping = annotation == null ? new String[0] : (String[]) AnnotationUtils.getValue(annotation);
+        Assert.notNull(controller);
 
-		if (mapping.length > 1) {
-			throw new IllegalStateException("Multiple controller mappings defined! Unable to build URI!");
-		}
+        RequestMapping annotation = AnnotationUtils.findAnnotation(controller, RequestMapping.class);
+        String[] mapping = annotation == null ? new String[0] : (String[]) AnnotationUtils.getValue(annotation);
 
-		ControllerLinkBuilder builder = new ControllerLinkBuilder(ServletUriComponentsBuilder.fromCurrentServletMapping());
+        if (mapping.length > 1) {
+            throw new IllegalStateException("Multiple controller mappings defined! Unable to build URI!");
+        }
 
-		if (mapping.length == 0) {
-			return builder;
-		}
+        ControllerLinkBuilder builder = new ControllerLinkBuilder(ServletUriComponentsBuilder.fromCurrentServletMapping());
 
-		UriTemplate template = new UriTemplate(mapping[0]);
-		return builder.slash(template.expand(parameters));
-	}
-	
-	/* 
-	 * (non-Javadoc)
-	 * @see org.springframework.hateoas.UriComponentsLinkBuilder#getThis()
-	 */
-	@Override
-	protected ControllerLinkBuilder getThis() {
-		return this;
-	}
+        if (mapping.length == 0) {
+            return builder;
+        }
 
-	/* 
-	 * (non-Javadoc)
-	 * @see org.springframework.hateoas.UriComponentsLinkBuilder#createNewInstance(org.springframework.web.util.UriComponentsBuilder)
-	 */
-	@Override
-	protected ControllerLinkBuilder createNewInstance(UriComponentsBuilder builder) {
-		return new ControllerLinkBuilder(builder);
-	}
+        UriTemplate template = new UriTemplate(mapping[0]);
+        return builder.slash(template.expand(parameters));
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.hateoas.UriComponentsLinkBuilder#getThis()
+     */
+    @Override
+    protected ControllerLinkBuilder getThis() {
+        return this;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.springframework.hateoas.UriComponentsLinkBuilder#createNewInstance(org.springframework.web.util.UriComponentsBuilder)
+     */
+    @Override
+    protected ControllerLinkBuilder createNewInstance(UriComponentsBuilder builder) {
+        return new ControllerLinkBuilder(builder);
+    }
 }

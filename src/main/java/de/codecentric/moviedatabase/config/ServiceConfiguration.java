@@ -6,12 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import de.codecentric.moviedatabase.service.InMemoryMovieService;
 import de.codecentric.moviedatabase.service.MovieService;
 
-@Configuration 
+@Configuration
 public class ServiceConfiguration {
-	
-	@Bean
-	public MovieService movieService(){
-		return new InMemoryMovieService();
-	}
-	
+
+    @Bean
+    public MovieService movieService() {
+        return new InMemoryMovieService();
+    }
+
 }

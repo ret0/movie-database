@@ -40,7 +40,7 @@ public class MovieResourceAssembler extends AbstractResourceAssembler<Movie, Res
                 .slash(movie.getId())
                 .slash(PathFragment.TAGS.getName())
                 .withRel(Relation.TAGS.getName());
-        return new Resource<Movie>(movie, selfLink, moviesLink, deleteLink, editLink, commentsLink, tagsLink);
+        return new Resource<>(movie, selfLink, moviesLink, deleteLink, editLink, commentsLink, tagsLink);
     }
 
 }

@@ -1,74 +1,72 @@
 package de.codecentric.moviedatabase.controller;
 
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletResponse;
-
+import de.codecentric.moviedatabase.domain.Tag;
+import de.codecentric.moviedatabase.hateoas.ControllerLinkBuilderFactory;
+import de.codecentric.moviedatabase.model.MovieForm;
+import de.codecentric.moviedatabase.service.MovieService;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import de.codecentric.moviedatabase.domain.Tag;
-import de.codecentric.moviedatabase.hateoas.ControllerLinkBuilderFactory;
-import de.codecentric.moviedatabase.model.MovieForm;
-import de.codecentric.moviedatabase.service.MovieService;
+import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
-@RequestMapping(value = "/movies", headers={"X-Requested-With=XMLHttpRequest"}, produces="text/html")
-public class HtmlPartialMovieController extends AbstractMovieController{
-	
-	public HtmlPartialMovieController(MovieService movieService,
-			ControllerLinkBuilderFactory linkBuilderFactory,
-			TagResourceAssembler tagResourceAssembler,
-			MovieResourceAssembler movieResourceAssembler) {
-		super(movieService, linkBuilderFactory, tagResourceAssembler, movieResourceAssembler, true);
-	}
+@RequestMapping(value = "/movies", headers = {"X-Requested-With=XMLHttpRequest"}, produces = "text/html")
+public class HtmlPartialMovieController extends AbstractMovieController {
 
-	//###################### movies #################################################
-	
-	@RequestMapping(method = RequestMethod.POST)
-	public String createMovie(MovieForm movieForm, Model model, HttpServletResponse response) {
-		doCreateMovie(movieForm);
-		if (movieForm.isAddAnotherMovie()){
-			response.setHeader("redirectUrl", linkBuilderFactory.linkTo(AbstractMovieController.class).slash(PathFragment.NEW.getName()).withSelfRel().getHref());
-			return getCreateMovie(model);
-		}
-		
-		return getMovies(model, null);
-	}
+    public HtmlPartialMovieController(MovieService movieService,
+                                      ControllerLinkBuilderFactory linkBuilderFactory,
+                                      TagResourceAssembler tagResourceAssembler,
+                                      MovieResourceAssembler movieResourceAssembler) {
+        super(movieService, linkBuilderFactory, tagResourceAssembler, movieResourceAssembler, true);
+    }
 
-	//########################### movie #####################################################
-	
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public String editMovie(@PathVariable UUID id, MovieForm movieForm, Model model) {
-		doEditMovie(id, movieForm);
-		return getMovie(id, model);
-	}
+    //###################### movies #################################################
 
-	//###################### comments #####################################
-	
-	@RequestMapping(value = "/{id}/comments", method = RequestMethod.POST)
-	public String createComment(@PathVariable UUID id,
-			@RequestParam String content, Model model) {
-		doCreateComment(id, content);
-		return getComments(id, model);
-	}
+    @RequestMapping(method = RequestMethod.POST)
+    public String createMovie(MovieForm movieForm, Model model, HttpServletResponse response) {
+        doCreateMovie(movieForm);
+        if (movieForm.isAddAnotherMovie()) {
+            response.setHeader("redirectUrl", linkBuilderFactory.linkTo(AbstractMovieController.class).slash(PathFragment.NEW.getName()).withSelfRel().getHref());
+            return getCreateMovie(model);
+        }
 
-	//###################### tags #############################################
-	
-	@RequestMapping(value = "/{id}/tags", method = RequestMethod.POST)
-	public String addTagToMovie(@PathVariable UUID id, @RequestParam Tag tag, Model model) {
-		doAddTagToMovie(id, tag);
-		return getTags(id, model);
-	}
+        return getMovies(model, null);
+    }
 
-	@RequestMapping(value = "/{id}/tags/{tag}", method = RequestMethod.DELETE)
-	public String removeTagFromMovie(@PathVariable UUID id,
-			@PathVariable Tag tag, Model model, HttpServletResponse response) {
-		doRemoveTagFromMovie(id, tag);
-		response.setHeader("redirectUrl", linkBuilderFactory.linkTo(AbstractMovieController.class).slash(id).slash(PathFragment.TAGS.getName()).withSelfRel().getHref());
-		return getTags(id, model);
-	}
+    //########################### movie #####################################################
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public String editMovie(@PathVariable UUID id, MovieForm movieForm, Model model) {
+        doEditMovie(id, movieForm);
+        return getMovie(id, model);
+    }
+
+    //###################### comments #####################################
+
+    @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST)
+    public String createComment(@PathVariable UUID id,
+                                @RequestParam String content, Model model) {
+        doCreateComment(id, content);
+        return getComments(id, model);
+    }
+
+    //###################### tags #############################################
+
+    @RequestMapping(value = "/{id}/tags", method = RequestMethod.POST)
+    public String addTagToMovie(@PathVariable UUID id, @RequestParam Tag tag, Model model) {
+        doAddTagToMovie(id, tag);
+        return getTags(id, model);
+    }
+
+    @RequestMapping(value = "/{id}/tags/{tag}", method = RequestMethod.DELETE)
+    public String removeTagFromMovie(@PathVariable UUID id,
+                                     @PathVariable Tag tag, Model model, HttpServletResponse response) {
+        doRemoveTagFromMovie(id, tag);
+        response.setHeader("redirectUrl", linkBuilderFactory.linkTo(AbstractMovieController.class).slash(id).slash(PathFragment.TAGS.getName()).withSelfRel().getHref());
+        return getTags(id, model);
+    }
 
 }

@@ -14,51 +14,51 @@ import de.codecentric.moviedatabase.controller.MovieResourceAssembler;
 import de.codecentric.moviedatabase.controller.TagResourceAssembler;
 import de.codecentric.moviedatabase.hateoas.ControllerLinkBuilderFactory;
 
-@Configuration 
+@Configuration
 @Import(ServiceConfiguration.class)
 public class ControllerConfiguration {
-	
-	@Autowired
-	private ServiceConfiguration serviceConfiguration;
-	
-	@Bean
-	public ControllerLinkBuilderFactory controllerLinkBuilderFactory(){
-		return new ControllerLinkBuilderFactory();
-	}
-	
-	@Bean
-	public TagResourceAssembler tagResourceAssembler(){
-		return new TagResourceAssembler(controllerLinkBuilderFactory());
-	}
-	
-	@Bean
-	public MovieResourceAssembler movieResourceAssembler(){
-		return new MovieResourceAssembler(controllerLinkBuilderFactory());
-	}
-	
-	@Bean
-	public HtmlMovieController htmlMovieController(){
-		return new HtmlMovieController(serviceConfiguration.movieService(), controllerLinkBuilderFactory(), tagResourceAssembler(), movieResourceAssembler());
-	}
 
-	@Bean
-	public HtmlPartialMovieController MovieController(){
-		return new HtmlPartialMovieController(serviceConfiguration.movieService(), controllerLinkBuilderFactory(), tagResourceAssembler(), movieResourceAssembler());
-	}
-	
-	@Bean
-	public HtmlPartialTagController htmlPartialTagController() {
-		return new HtmlPartialTagController(serviceConfiguration.movieService(), tagResourceAssembler());
-	}
+    @Autowired
+    private ServiceConfiguration serviceConfiguration;
 
-	@Bean
-	public JsonMovieController jsonMovieController() {
-		return new JsonMovieController(serviceConfiguration.movieService(), movieResourceAssembler(), tagResourceAssembler());
-	}
-	
-	@Bean
-	public JsonTagController jsonTagController() {
-		return new JsonTagController(serviceConfiguration.movieService(), tagResourceAssembler());
-	}
+    @Bean
+    public ControllerLinkBuilderFactory controllerLinkBuilderFactory() {
+        return new ControllerLinkBuilderFactory();
+    }
+
+    @Bean
+    public TagResourceAssembler tagResourceAssembler() {
+        return new TagResourceAssembler(controllerLinkBuilderFactory());
+    }
+
+    @Bean
+    public MovieResourceAssembler movieResourceAssembler() {
+        return new MovieResourceAssembler(controllerLinkBuilderFactory());
+    }
+
+    @Bean
+    public HtmlMovieController htmlMovieController() {
+        return new HtmlMovieController(serviceConfiguration.movieService(), controllerLinkBuilderFactory(), tagResourceAssembler(), movieResourceAssembler());
+    }
+
+    @Bean
+    public HtmlPartialMovieController MovieController() {
+        return new HtmlPartialMovieController(serviceConfiguration.movieService(), controllerLinkBuilderFactory(), tagResourceAssembler(), movieResourceAssembler());
+    }
+
+    @Bean
+    public HtmlPartialTagController htmlPartialTagController() {
+        return new HtmlPartialTagController(serviceConfiguration.movieService(), tagResourceAssembler());
+    }
+
+    @Bean
+    public JsonMovieController jsonMovieController() {
+        return new JsonMovieController(serviceConfiguration.movieService(), movieResourceAssembler(), tagResourceAssembler());
+    }
+
+    @Bean
+    public JsonTagController jsonTagController() {
+        return new JsonTagController(serviceConfiguration.movieService(), tagResourceAssembler());
+    }
 
 }
